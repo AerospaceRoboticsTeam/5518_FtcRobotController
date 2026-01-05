@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 //import org.firstinspires.ftc.teamcode.Libs.GoBilda.GoBildaPinpointDriver;
 import org.firstinspires.ftc.teamcode.TeleOp.TeleOp_5518;
+import com.qualcomm.robotcore.hardware.CRServo;
 
 public class MecanumDrive
 {
@@ -26,7 +27,8 @@ public class MecanumDrive
     private double fullPower = 1.0;
     private double cutPower = 0.5;
 
-    private DcMotor frontLeft, frontRight, backLeft, backRight;
+    private DcMotor frontLeft, frontRight, backLeft, backRight, outake;
+    private CRServo loader;;
 
     // Declare OpMode member for the Odometry Computer
     //GoBildaPinpointDriver odo;
@@ -43,6 +45,9 @@ public class MecanumDrive
 
         frontLeft.setDirection(DcMotor.Direction.REVERSE);
         backLeft.setDirection(DcMotor.Direction.REVERSE);
+
+        loader = iBot.hardwareMap.crservo.get("loader");
+        outake = iBot.hardwareMap.dcMotor.get("outake");
 
         // Initialize Gobilda Pinpoint Computer
         //odo = iBot.hardwareMap.get(GoBildaPinpointDriver.class,"odo");
@@ -90,6 +95,20 @@ public class MecanumDrive
         backLeft.setPower(leftBackPower * cutPower);
         frontRight.setPower(rightFrontPower * cutPower);
         backRight.setPower(rightBackPower * cutPower);
+
+        if (bot.gamepad2.left_trigger != 0) {
+            loader.setPower(1);
+        }
+        else {
+            loader.setPower(0);
+        }
+
+       if (bot.gamepad2.right_trigger != 0) {
+            outake.setPower(fullPower);
+        }
+        else {
+            outake.setPower(0);
+        }
     }
 
     public void stop()
@@ -98,6 +117,7 @@ public class MecanumDrive
         frontRight.setPower(0);
         backLeft.setPower(0);
         backRight.setPower(0);
+
     }
 
     public void setPower(double power)
